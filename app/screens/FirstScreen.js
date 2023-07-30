@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Image,
+} from "react-native";
+import Header from "../components/Header";
 
 const FrontPage = () => {
   const navigation = useNavigation();
@@ -9,7 +18,7 @@ const FrontPage = () => {
   };
 
   const handleApplyButtonPress = () => {
-    navigation.navigate("WelcomeScreen");
+    navigation.navigate("StudyLevel");
   };
 
   const handleDownloadButtonPress = () => {
@@ -21,89 +30,117 @@ const FrontPage = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Machakos Town Constituency CDF Bursaries</Text>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
-      <Text style={styles.p}>
-        Please fill in the true information failure to which you will be
-        disqualified.
-      </Text>
-      <Text style={styles.p}>
-        After filling in the details, download the form which will be presented
-        in person at the annual meeting day.
-      </Text>
-      <Text style={styles.p}>Machakos Town Constituency CDF Bursaries</Text>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
+    <>
+      <Header />
+      <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            style={{ height: 200, width: 400, resizeMode: "center" }}
+            source={{
+              uri: "https://nairobireview.africa/wp-content/uploads/2023/03/3194926196.png",
+            }}
+          />
+        </View>
+        <Text
+          style={{
+            textAlign: "center",
+            padding: 10,
+            fontWeight: "bold",
+            fontSize: 18,
+            backgroundColor: "gray",
+            borderColor: "gray",
+            borderRadius: 7,
+            marginHorizontal: 30,
+            marginBottom:10
+          }}
+        >
+          UNIVERSITIES AND HIGH SCHOOL BURSARIES
+        </Text>
+        <Text style={styles.p}>
+          Please fill in the true information failure to which you will be
+          disqualified.
+        </Text>
+        <Text style={styles.p}>
+          After filling in the details, download the form which will be
+          presented in person at the annual meeting day.
+        </Text>
+        <Text style={styles.p}>Machakos Town Constituency CDF Bursaries</Text>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleAdminButtonPress}>
-        <Text style={styles.buttonText}>Admin</Text>
-      </TouchableOpacity>
+        <Pressable style={styles.button} onPress={handleAdminButtonPress}>
+          <Text style={styles.buttonText}>Admin</Text>
+        </Pressable>
 
-      <TouchableOpacity style={styles.button} onPress={handleApplyButtonPress}>
-        <Text style={styles.buttonText}>Apply for Bursary</Text>
-      </TouchableOpacity>
+        <Pressable style={styles.button} onPress={handleApplyButtonPress}>
+          <Text style={styles.buttonText}>Apply for Bursary</Text>
+        </Pressable>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleDownloadButtonPress}
-      >
-        <Text style={styles.buttonText}>Form and Options</Text>
-      </TouchableOpacity>
+        <Pressable style={styles.button} onPress={handleDownloadButtonPress}>
+          <Text style={styles.buttonText}>Form and Options</Text>
+        </Pressable>
 
-      <TouchableOpacity style={styles.button} onPress={handlePrintButtonPress}>
-        <Text style={styles.buttonText}>Print Form</Text>
-      </TouchableOpacity>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
-      <View style={styles.lineContainer}>
-        <View style={[styles.line, { backgroundColor: "#008000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
-        <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
-        <View style={[styles.line, { backgroundColor: "#000000" }]} />
-      </View>
-    </View>
+        <Pressable style={styles.button} onPress={handlePrintButtonPress}>
+          <Text style={styles.buttonText}>Print Form</Text>
+        </Pressable>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
+        <View style={styles.lineContainer}>
+          <View style={[styles.line, { backgroundColor: "#008000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FF0000" }]} />
+          <View style={[styles.line, { backgroundColor: "#FFFFFF" }]} />
+          <View style={[styles.line, { backgroundColor: "#000000" }]} />
+        </View>
+      </ScrollView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop:70,
-    alignItems: "center",
-    padding: 20,
-    backgroundColor:"aliceblue"
+    flexGrow: 1,
+    backgroundColor: "#89adac",
+
+    paddingBottom: 50,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 40,
-    color: "red",
+    color: "#ffff",
+    backgroundColor: "black",
+    paddingTop: 70,
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   lineContainer: {
     flexDirection: "row",
@@ -118,7 +155,6 @@ const styles = StyleSheet.create({
   line: {
     flex: 1,
     height: 5,
-   
   },
 
   p: {
@@ -126,6 +162,9 @@ const styles = StyleSheet.create({
     fontWeight: "light",
     marginBottom: 20,
     color: "black",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
   },
   button: {
     backgroundColor: "#2196F3",

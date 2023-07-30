@@ -1,64 +1,153 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, Text, StyleSheet } from "react-native";
+import { View, Button, Text, StyleSheet, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import Header from "../components/Header";
+import QrCode from "../components/QrCode";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Admin() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("");
-
-  const askForCameraPermission = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
-    setHasPermission(status === "granted");
-  };
+  const [totalApplicants, setTotalApplicants] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    askForCameraPermission();
+    axios
+      .get("https://ngcdf.onrender.com/applicants/total_applicants")
+      .then((response) => {
+        setTotalApplicants(response.data.totalApplicants);
+        console.log(totalApplicants);
+        setLoading(false); 
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setText(data);
-    console.log("type: " + type, "\n data" + data);
-  };
-
-  if (hasPermission === null) {
-    return (
-      <View style={styles.container}>
-        <Text>Requesting camera permission...</Text>
-      </View>
-    );
-  }
-
-  if (hasPermission === false) {
-    return (
-      <View style={styles.container}>
-        <Text>Permission to access the camera was denied.</Text>
-        <Button
-          title={"Allow Camera"}
-          onPress={() => askForCameraPermission()}
-        />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.barcodeBox}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-      </View>
-      <Text style={styles.mainText}>{text}</Text>
-      {scanned && (
-        <Button
-          title={"Scan Again?"}
-          onPress={() => setScanned(false)}
-          color="tomato"
-        />
+    <>
+      <Header />
+      {loading ? (
+        <View style={styles.container}>
+          <Text style={styles.mainText}>Loading...</Text>
+        </View>
+      ) : (
+        <View
+          style={{
+            padding: 20,
+            fontSize: 17,
+            fontWeight: "600",
+          }}
+        >
+          <Pressable
+            onPress={() => navigation.navigate("CollegeApplicants")}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingBottom: 30,
+              alignItems: "center",
+              backgroundColor: "#ffffff",
+              borderRadius: 8,
+              padding: 16,
+              marginBottom: 16,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>
+              University/Colleges Applicants
+            </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "white",
+                borderColor: "red",
+                borderRadius: 15,
+                backgroundColor: "gray",
+                padding: 10,
+                borderWidth: 2,
+              }}
+            >
+              {totalApplicants}
+            </Text>
+          </Pressable>
+
+          <View
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: 8,
+                padding: 16,
+                paddingBottom: 30,
+              
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>
+              Number of HighSchool Applicants
+            </Text>
+          </View>
+          <Pressable
+            onPress={() => navigation.navigate("QrCode")}
+            style={{
+              marginVertical: 20,
+              backgroundColor: "#ffffff",
+              borderRadius: 8,
+              padding: 16,
+              marginBottom: 16,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>
+              Scan Documents
+            </Text>
+            </Pressable>
+            <Pressable
+            onPress={() => navigation.navigate("ApprovedApplicants")}
+            style={{
+              marginVertical: 20,
+              backgroundColor: "#ffffff",
+              borderRadius: 8,
+              padding: 16,
+              marginBottom: 16,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>
+              Approved Applicants
+            </Text>
+          </Pressable>
+        </View>
       )}
-    </View>
+    </>
   );
 }
 
@@ -68,17 +157,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  barcodeBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 300,
-    width: 300,
-    borderRadius: 30,
-    overflow: "hidden",
-    backgroundColor: "tomato",
-  },
-  mainText: {
-    fontSize: 16,
-    margin: 20,
+
+  textContainer: {
+    flexDirection: "row", // Set flexDirection to "row"
+    justifyContent: "flex-end", // Align items to the right end of the container
+    padding: 20,
+    fontSize: 17,
+    fontWeight: "600",
   },
 });

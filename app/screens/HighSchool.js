@@ -1,9 +1,3 @@
-import React, { useRef, useState } from "react";
-import { SelectList } from "react-native-dropdown-select-list";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import QRCode from "qrcode.react";
-
-
 import {
   StyleSheet,
   Text,
@@ -12,12 +6,18 @@ import {
   TextInput,
   ScrollView,
   Alert,
-  ActivityIndicator,
+  Image,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import axios from "axios";
+import { SelectList } from "react-native-dropdown-select-list";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
 import Header from "../components/Header";
-export default function WelcomeScreen() {
+import ImageUploadView from "../components/ImageUpload";
+
+const HighSchool = () => {
   const [name, setName] = useState("");
   const [id, setID] = useState("");
   const [institution, setInstitution] = useState("");
@@ -37,8 +37,7 @@ export default function WelcomeScreen() {
   const [selectedGender, setSelectedGender] = React.useState("");
   const [selectedmodeofstudy, setSelectedModeofStudy] = React.useState("");
   const [selectedFamilyStatus, setSelectedFamilyStatus] = React.useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  // const phoneInput = useRef < PhoneInput > (null);
+  const [image, setImage] = useState(null);
 
   const handleFormSubmit = () => {
     if (validateForm()) {
@@ -69,7 +68,7 @@ export default function WelcomeScreen() {
           Math.random().toString(36).substring(2, 15)
         );
       }
-      setIsLoading(true);
+
       axios
         .post("https://ngcdf.onrender.com/form/post", formData)
         .then((response) => {
@@ -78,7 +77,6 @@ export default function WelcomeScreen() {
           Alert.alert(
             "Form Submitted Successfuly, proceed to download your form"
           );
-          setIsLoading(false);
           console.log(response.data);
           const formId = response.data.id;
           console.log("formid: ", formId);
@@ -104,7 +102,6 @@ export default function WelcomeScreen() {
           setApplicationDate("");
         })
         .catch((error) => {
-          setIsLoading(false);
           console.error("Error submitting form:", error);
         });
     }
@@ -212,7 +209,21 @@ export default function WelcomeScreen() {
     }
     return true;
   };
-  
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
   return (
     <>
       <Header />
@@ -266,7 +277,7 @@ export default function WelcomeScreen() {
           />
           <TextInput
             style={styles.input}
-            placeholder="Semester"
+            placeholder="Term"
             value={semester}
             onChangeText={setSemester}
           />
@@ -278,7 +289,7 @@ export default function WelcomeScreen() {
           />
           <TextInput
             style={styles.input}
-            placeholder="Mobile Number"
+            placeholder="Parent's Mobile Number"
             value={mobileNumber}
             onChangeText={setMobileNumber}
           />
@@ -345,46 +356,32 @@ export default function WelcomeScreen() {
           />
           <TextInput
             style={styles.input}
-            placeholder="Date of Application DD/MM/YYYY"
+            placeholder="Date of Application  DD/MM/YYYY"
             value={applicationDate}
             onChangeText={setApplicationDate}
           />
 
           <Pressable
-            onPress={handleFormSubmit}
-            disabled={isLoading}
-            style={{
-              width: 200,
-              backgroundColor: isLoading ? "gray" : "#003580",
-              padding: 15,
-              borderRadius: 7,
-              marginTop: 50,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
+            style={styles.submitButton}
+            title="Pick an image from camera roll"
+            onPress={pickImage}
           >
-            {isLoading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  color: "white",
-                }}
-              >
-                Submit
-              </Text>
-            )}
+            <Text style={styles.buttonText}>Upload ID and Fee Balance Structure</Text>
+            </Pressable>
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 200, height: 200 }}
+            />
+          )}
+
+          <Pressable style={styles.submitButton} onPress={handleFormSubmit}>
+            <Text style={styles.buttonText}>Submit</Text>
           </Pressable>
         </View>
         <View style={styles.noteContainer}>
           <Text style={styles.noteText}>
-            Note: This application form shall be submitted in person during the
-            students meeting. One will be required to sign and produce a copy of
-            national id and school id, failure to which will lead to automatic
-            disqualification
+            Note: Ensure you upload a valid upto date fees structure, and a clear image of parents/guardians ID, or your birth certificate, failure to which you will be disqualified automatically
           </Text>
           <View style={styles.signatureContainer}>
             <View style={styles.stampPlaceholder} />
@@ -394,7 +391,9 @@ export default function WelcomeScreen() {
       </ScrollView>
     </>
   );
-}
+};
+
+export default HighSchool;
 
 const styles = StyleSheet.create({
   container: {
@@ -428,7 +427,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   submitButton: {
-    backgroundColor: "#003580",
+    backgroundColor: "#24a0ed",
     height: 40,
     justifyContent: "center",
     alignItems: "center",

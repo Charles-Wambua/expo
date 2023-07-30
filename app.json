@@ -4,27 +4,46 @@
     "slug": "MachakosCDF",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
+    "icon": "https://ngcdf.go.ke/wp-content/uploads/2020/01/cropped-cdf-official-logo.png",
     "userInterfaceStyle": "light",
+   
     "splash": {
-      "image": "./app/assets/splash.png",
+      "image": "https://ngcdf.go.ke/wp-content/uploads/2020/01/cropped-cdf-official-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "width": 200, 
+      "height": 200 
     },
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
+       
+        "foregroundImage": "https://ngcdf.go.ke/wp-content/uploads/2020/01/cropped-cdf-official-logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      
+      "package": "com.charleswambuaa.MachakosCDF"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7c7781c4-e8db-4cdd-ac27-2374b4c4bc78"
+      }
     }
   }
 }
